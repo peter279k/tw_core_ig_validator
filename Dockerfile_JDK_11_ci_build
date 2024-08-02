@@ -1,0 +1,14 @@
+FROM peter279k/docker_fhir_validator_11:latest
+
+LABEL maintainer="Peter Li <peter279k@gmail.com>"
+
+RUN cd /root && \
+    mkdir -p /root/.fhir/packages && \
+    wget -O package.tgz https://build.fhir.org/ig/cctwFHIRterm/MOHW_TWCoreIG_Build/package.tgz && \
+    tar -xvf package.tgz && \
+    rm -f package.tgz && \
+    tw_core_version=$(cat CapabilityStatementTWCoreServer.openapi.json | grep -oP '"version": "(\d+).(\d+).(\d+)"' | awk '{print $2}' | sed -e 's/"//g') && \
+    mkdir "tw.gov.mohw.twcore#$tw_core_version" && \
+    mv package "tw.gov.mohw.twcore#$tw_core_version/"
+
+ENTRYPOINT [ "bash" ]

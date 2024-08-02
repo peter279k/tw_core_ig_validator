@@ -1,0 +1,81 @@
+name: Docker Publishing
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  up-and-running:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build TWCore CI Build with latest docker_fhir_validator_11 image
+        run: |
+          docker build -f Dockerfile_JDK_11_ci_build -t tw_core_ig_validator_11 .
+
+      - name: Tags and push tw_core_ig_validator_11
+        run: |
+          export latest_version=$(curl -sS 'https://build.fhir.org/ig/cctwFHIRterm/MOHW_TWCoreIG_Build/downloads.html' | grep -oP 'v[\d+].[\d+].[\d+]' | sed -e 's/v//g')
+          export remote_latest=!$(curl -sS 'https://registry.hub.docker.com/v2/repositories/peter279k/tw_core_ig_validator_11/tags/' | grep -c "$latest_version")
+          if [[ "$remote_latest" == "!1" ]]; then
+              echo "There is nothing to pull :)."
+              exit 0;
+          fi;
+          docker tag tw_core_ig_validator_11 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:$latest_version
+          docker tag tw_core_ig_validator_11 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:latest
+          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:$latest_version
+          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:latest
+
+      - name: Build TWCore CI Build with Docker latest docker_fhir_validator_17 image
+        run: docker build -f Dockerfile_JDK_17_ci_build -t tw_core_ig_validator_17 .
+
+      - name: Tags and push tw_core_ig_validator_17
+        run: |
+          export latest_version=$(curl -sS 'https://build.fhir.org/ig/cctwFHIRterm/MOHW_TWCoreIG_Build/downloads.html' | grep -oP 'v[\d+].[\d+].[\d+]' | sed -e 's/v//g')
+          export remote_latest=$(curl -sS 'https://registry.hub.docker.com/v2/repositories/peter279k/tw_core_ig_validator_17/tags/' | grep -c "$latest_version")
+          if [[ "$remote_latest" == "!1" ]]; then
+              echo "There is nothing to pull :)."
+              exit 0;
+          fi;
+          docker tag tw_core_ig_validator_17 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:$latest_version
+          docker tag tw_core_ig_validator_17 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:latest
+          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:$latest_version
+          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:latest
+
+      - name: Build TWCore MOHW Build with latest docker_fhir_validator_11 image
+        run: |
+          docker build -f Dockerfile_JDK_11_mohw -t tw_core_ig_validator_11 .
+
+      - name: Tags and push tw_core_ig_validator_11
+        run: |
+          export latest_version=$(curl -sS 'https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition-Patient-twcore.html' | grep -oP 'v[\d+].[\d+].[\d+]' | sed -e 's/v//g')
+          export remote_latest=!$(curl -sS 'https://registry.hub.docker.com/v2/repositories/peter279k/tw_core_ig_validator_11/tags/' | grep -c "$latest_version")
+          if [[ "$remote_latest" == "!1" ]]; then
+              echo "There is nothing to pull :)."
+              exit 0;
+          fi;
+          docker tag tw_core_ig_validator_11 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:$latest_version
+          docker tag tw_core_ig_validator_11 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:latest
+          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:$latest_version
+          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:latest
+
+      - name: Build TWCore MOHW Build with latest Docker docker_fhir_validator_17 image
+        run: docker build -f Dockerfile_JDK_17_mohw -t tw_core_ig_validator_17 .
+
+      - name: Tags and push tw_core_ig_validator_17
+        run: |
+          export latest_version=$(curl -sS 'https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition-Patient-twcore.html' | grep -oP 'v[\d+].[\d+].[\d+]' | sed -e 's/v//g')
+          export remote_latest=$(curl -sS 'https://registry.hub.docker.com/v2/repositories/peter279k/tw_core_ig_validator_17/tags/' | grep -c "$latest_version")
+          if [[ "$remote_latest" == "!1" ]]; then
+              echo "There is nothing to pull :)."
+              exit 0;
+          fi;
+          docker tag tw_core_ig_validator_17 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:$latest_version
+          docker tag tw_core_ig_validator_17 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:latest
+          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:$latest_version
+          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:latest
