@@ -62,7 +62,6 @@ jobs:
           docker tag tw_core_ig_validator_11 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:$latest_version
           docker tag tw_core_ig_validator_11 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:latest
           docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:$latest_version
-          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_11:latest
 
       - name: Build TWCore MOHW Build with latest Docker docker_fhir_validator_17 image
         run: docker build -f Dockerfile_JDK_17_mohw -t tw_core_ig_validator_17 .
@@ -78,4 +77,3 @@ jobs:
           docker tag tw_core_ig_validator_17 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:$latest_version
           docker tag tw_core_ig_validator_17 ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:latest
           docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:$latest_version
-          docker push ${{ secrets.DOCKER_USER }}/tw_core_ig_validator_17:latest
