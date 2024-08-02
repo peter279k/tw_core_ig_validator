@@ -53,7 +53,7 @@ jobs:
 
       - name: Tags and push tw_core_ig_validator_11
         run: |
-          export latest_version=$(curl -sSk 'https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition-Patient-twcore.html' | grep -oP 'v[\d+].[\d+].[\d+]' | sed -e 's/v//g')
+          export latest_version=$(curl -sSk 'https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition-Patient-twcore.html' | grep -oP 'v[\d+].[\d+].[\d+]' | sed -e 's/v//g' | head -n 1)
           export remote_latest=!$(curl -sS 'https://registry.hub.docker.com/v2/repositories/peter279k/tw_core_ig_validator_11/tags/' | grep -c "$latest_version")
           if [[ "$remote_latest" == "!1" ]]; then
               echo "There is nothing to pull :)."
@@ -68,7 +68,7 @@ jobs:
 
       - name: Tags and push tw_core_ig_validator_17
         run: |
-          export latest_version=$(curl -sSk 'https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition-Patient-twcore.html' | grep -oP 'v[\d+].[\d+].[\d+]' | sed -e 's/v//g')
+          export latest_version=$(curl -sSk 'https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition-Patient-twcore.html' | grep -oP 'v[\d+].[\d+].[\d+]' | sed -e 's/v//g' | head -n 1)
           export remote_latest=$(curl -sS 'https://registry.hub.docker.com/v2/repositories/peter279k/tw_core_ig_validator_17/tags/' | grep -c "$latest_version")
           if [[ "$remote_latest" == "!1" ]]; then
               echo "There is nothing to pull :)."
