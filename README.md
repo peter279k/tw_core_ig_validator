@@ -28,3 +28,11 @@ docker pull peter279k/tw_core_ig_validator_11:latest
 ```sh
 docker pull peter279k/tw_core_ig_validator_17:latest
 ```
+
+# Run Validator Usage
+
+```sh
+docker run \
+    -v /path/to/resource.json:/root/resource.json \
+    peter279k/tw_core_ig_validator_11:0.2.2 -c "cd /root/ && java -Dfile.encoding=UTF-8 -jar validator_cli.jar ./resource.json -version 4.0 -ig tw.gov.mohw.twcore"
+```
